@@ -1,3 +1,5 @@
+#ifndef DECK_H
+#define DECK_H
 #include "card.h"
 
 struct pile {
@@ -16,3 +18,5 @@ void shuffle(struct pile *deck);
 int pile_len(struct pile *deck);
 //deal
 struct pile *deal(struct pile **deck, int count);
+
+#endif

@@ -1,15 +1,31 @@
 #include "hand.h"
 
-void add_card(struct hand *hand, struct card card) {
-	if(!hand) {
-		hand = malloc(sizeof(struct hand));
-		hand.card = card;
-		hand->left = NULL;
-		hand->right = NULL;
-	} else if (card.rank < hand->card.rank) {
-		add_card(hand->left, card);
+struct hand *build_hand(struct pile *pile) {
+	struct hand *new_hand = NULL;
+	while(pile) {
+		add_card(&new_hand, pile->card);
+		pile = pile->next;
+	}
+	return new_hand;
+
+
+}
+
+
+void add_card(struct hand **handp_loc, struct card card) {
+	if(!handp_loc) {
+		return;
+	}
+	struct hand *handp = *handp_loc;
+	if(!handp) {
+		handp = malloc(sizeof(struct hand));
+		handp->card = card;
+		handp->left = NULL;
+		handp->right = NULL;
+	} else if (card.rank < handp->card.rank) {
+		add_card(&handp->left, card);
 	} else  {
-		add_card(hand->right, card);
+		add_card(&handp->right, card);
 	}
 }
 
