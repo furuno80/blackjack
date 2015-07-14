@@ -22,6 +22,7 @@ void add_card(struct hand **handp_loc, struct card card) {
 		handp->card = card;
 		handp->left = NULL;
 		handp->right = NULL;
+		*handp_loc = handp;
 	} else if (card.rank < handp->card.rank) {
 		add_card(&handp->left, card);
 	} else  {
