@@ -14,7 +14,7 @@ struct hand {
 
 struct hand *build_hand(struct pile *pile);
 void free_hand(struct hand *hand);
-
+void add_card(struct pile *pile, struct card card);
 
 
 #endif /*HAND_H*/
