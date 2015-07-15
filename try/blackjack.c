@@ -28,7 +28,6 @@ void print_hand(struct hand *hand)
 	}
 
 	print_hand(hand->left);
-	print_hand(hand->right);
 
 	char buf[MAX_CARD_STR_LEN];
 	if(!card_str(&hand->card, buf, sizeof(buf))) {
@@ -36,6 +35,8 @@ void print_hand(struct hand *hand)
 	} else {
 		printf("In hand: %s\n", buf);
 	}
+	print_hand(hand->right);
+
 
 }
 
@@ -44,7 +45,7 @@ int main()
 
 {
     struct pile *deck = standard_52();
-    shuffle(deck);
+    //shuffle(deck);
     //struct pile *curr = deck;
     struct pile *dealt = deal(&deck, 5);
 

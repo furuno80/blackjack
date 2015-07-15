@@ -1,5 +1,35 @@
 #include "hand.h"
 
+void zig(struct hand **handp_loc) {
+	struct hand *root = *handp_loc;
+	struct hand *target = root -> left;
+
+	root->left = target->right;
+	target->right = root;
+
+	*handp_loc = target;
+
+}
+
+void zigzag(struct hand **hanp_loc) {
+	struct hand *root = *hanp_loc;
+	struct hand *parent = root->left;
+	struct hand *target = parent->right;;
+
+	root->left = target->right;
+	parent->right = target->left;
+	target->left = parent;
+	target->right = root;
+
+}
+//Assumes *handp_loc is not NULL
+void splay (struct hand **handp_loc, struct card needle) {
+
+
+
+}
+
+
 struct hand *build_hand(struct pile *pile) {
 	struct hand *new_hand = NULL;
 	while(pile) {
