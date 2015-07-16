@@ -1,29 +1,42 @@
 #include "hand.h"
 
-void zig(struct hand **handp_loc) {
+void zig(struct hand **handp_loc, struct hand *target) {
 	struct hand *root = *handp_loc;
-	struct hand *target = root->left;
 
-	root->left = target->right;
-	target->right = root;
-
+	if (target == root->left) {
+		root->left = target->right;
+		target->right = root;
+	} else {
+		root->right = target->left;
+		target->left = root;
+	}
 	*handp_loc = target;
 
 }
 
-void zigzag(struct hand **hanp_loc) {
+void zigzag(struct hand **hanp_loc, struct hand *parent) {
 	struct hand *root = *hanp_loc;
-	struct hand *parent = root->left;
-	struct hand *target = parent->right;
-	;
+	struct hand *target, *new_left, *new_right;
+	if(parent == root->left) {
+		target = parent->right;
+		new_left = parent;
+		new_right = root;
+	} else {
+		target = parent->left;
+		new_left = root;
+		new_right = parent;
+	}
+
 	if (!target) {
-		zig(hanp_loc);
+		zig(hanp_loc, parent);
 		return;
 	}
-	root->left = target->right;
-	parent->right = target->left;
-	target->left = parent;
-	target->right = root;
+
+	new_right->left = target->right;
+	new_left->right = target->left;
+	target->left = new_left;
+	target->right = new_right;
+	*hanp_loc = target;
 
 }
 
@@ -32,28 +45,28 @@ void splay(struct hand **handp_loc, int needle) {
 
 	struct hand *hand = *handp_loc;
 	while (needle != hand->card.rank) {
-
+		struct hand *side;
+		int factor = 1;
 		if (needle < hand->left->card.rank) {
-			if (!hand->left) {
-				return;
-			}
-		 else if (hand->left->card.rank < needle && hand->left->right) {
-			//Target is right of our left, zigzag splay and try again
-			zigzag(&hand);
-			continue;
-		} else {
-			zig(&hand);
-			continue;
+			side = hand->left;
 		}
-	} else if (needle > hand->left->card.rank) {
-		if (!hand->right) {
+		 else  {
+			 side = hand->right;
+			 factor = -1;
+		}
+		if (!side) {
+			//target does not exist, stop
 			return;
-		} else if (hand->right->card.rank >= needle) {
-			zig
+	} else if (factor * (needle - side->card.rank)>0) {
+		//Target is an inner node
+		zigzag(&hand, side);
+		continue;
+	} else {
+		//Target is on the outside
+		zig(&hand, side);
+		continue;
 		}
 	}
-
-}
 }
 
 struct hand *build_hand(struct pile *pile) {
