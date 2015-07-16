@@ -120,6 +120,7 @@ void add_card(struct hand **handp_loc, struct card card) {
 		}
 	root->right = added_card;
 	}
+	*handp_loc = root;
 
 }
 
