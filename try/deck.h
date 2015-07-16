@@ -2,6 +2,7 @@
 #define DECK_H
 #include "card.h"
 
+
 struct pile {
 	struct card card;
 	struct pile *next;

@@ -41,19 +41,22 @@ void print_hand(struct hand *hand)
 }
 
 
+
+
 int main()
 
 {
+
     struct pile *deck = standard_52();
+    //This is a change
     //shuffle(deck);
     //struct pile *curr = deck;
     struct pile *dealt = deal(&deck, 5);
-
     //print_deck(dealt);
     struct hand *myhand = build_hand(dealt);
     print_hand(myhand);
-    printf("There are %i cards in the deck", pile_len(deck));
-
+    printf("There are %i cards in the deck\n", pile_len(deck));
+    free_hand(myhand);
     free_deck(dealt);
     free_deck(deck);
 

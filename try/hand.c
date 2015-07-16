@@ -1,4 +1,5 @@
 #include "hand.h"
+#include <stdio.h>
 
 void zig(struct hand **handp_loc, struct hand *target) {
 	struct hand *root = *handp_loc;
@@ -49,7 +50,7 @@ void splay(struct hand **handp_loc, int needle) {
 	while (needle != hand->card.rank) {
 		struct hand *side;
 		int factor = 1;
-		if (needle < hand->left->card.rank) {
+		if (needle < hand->card.rank) {
 			side = hand->left;
 		}
 		 else  {
@@ -58,14 +59,14 @@ void splay(struct hand **handp_loc, int needle) {
 		}
 		if (!side) {
 			//target does not exist, stop
-			return;
+			break;
 	} else if (factor * (needle - side->card.rank)>0) {
 		//Target is an inner node
 		if(zigzag(&hand, side)) {
 		continue;
 		} else {
 			//could not complete a zigzag, target does not exist
-			return;
+			break;
 		}
 	} else {
 		//Target is on the outside
@@ -73,12 +74,15 @@ void splay(struct hand **handp_loc, int needle) {
 		continue;
 		}
 	}
+	*handp_loc = hand;
 }
 
 struct hand *build_hand(struct pile *pile) {
 struct hand *new_hand = NULL;
 while (pile) {
 	add_card(&new_hand, pile->card);
+	printf("Building hand: %d\n", pile->card.rank);
+	pprint_hand(new_hand, 0);
 	pile = pile->next;
 }
 return new_hand;
@@ -99,9 +103,7 @@ void add_card(struct hand **handp_loc, struct card card) {
 		*handp_loc = added_card;
 		return;
 	}
-
 	splay(&root, card.rank);
-
 	if (card.rank < root->card.rank) {
 		if(root->left && root->left->card.rank < card.rank) {
 			added_card->left = root->left;
@@ -115,11 +117,12 @@ void add_card(struct hand **handp_loc, struct card card) {
 		if(root->right && root->right->card.rank < card.rank){
 			added_card ->left = root->right;
 
-		} else if (root->left) {
+		} else if (root->right) {
 			added_card->right = root-> right;
 		}
 	root->right = added_card;
 	}
+	splay(&root, card.rank);
 	*handp_loc = root;
 
 }
@@ -136,4 +139,21 @@ free_hand(hand->left);
 free_hand(hand->right);
 free(hand);
 
+}
+
+void pprint_hand(struct hand *hand, int space) {
+	if(!hand) {
+		return;
+	}
+	for(int n = 0; n < space; n++) {
+		printf(" ");
+	}
+	char buf[MAX_CARD_STR_LEN];
+	if (!card_str(&hand->card, buf, sizeof(buf))) {
+		printf("Invalid card\n");
+	} else {
+		printf("In hand: %s\n", buf);
+	}
+	pprint_hand(hand->left, space + 1);
+	pprint_hand(hand->right, space + 1);
 }
