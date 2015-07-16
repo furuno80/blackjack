@@ -86,21 +86,41 @@ return new_hand;
 }
 
 void add_card(struct hand **handp_loc, struct card card) {
-if (!handp_loc) {
-	return;
-}
-struct hand *handp = *handp_loc;
-if (!handp) {
-	handp = malloc(sizeof(struct hand));
-	handp->card = card;
-	handp->left = NULL;
-	handp->right = NULL;
-	*handp_loc = handp;
-} else if (card.rank < handp->card.rank) {
-	add_card(&handp->left, card);
-} else {
-	add_card(&handp->right, card);
-}
+	if (!handp_loc) {
+		return;
+	}
+	struct hand *root = *handp_loc;
+	struct hand *added_card = malloc(sizeof(struct hand));
+
+	added_card->card = card;
+	added_card->left = NULL;
+	added_card->right = NULL;
+	if (!root) {
+		*handp_loc = added_card;
+		return;
+	}
+
+	splay(&root, card.rank);
+
+	if (card.rank < root->card.rank) {
+		if(root->left && root->left->card.rank < card.rank) {
+			added_card->left = root->left;
+		}
+		else if (root->left) {
+			added_card->right = root->left;
+		}
+		root->left = added_card;
+	}
+	else {
+		if(root->right && root->right->card.rank < card.rank){
+			added_card ->left = root->right;
+
+		} else if (root->left) {
+			added_card->right = root-> right;
+		}
+	root->right = added_card;
+	}
+
 }
 
 void free_hand(struct hand *hand) {
