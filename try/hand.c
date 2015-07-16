@@ -14,7 +14,7 @@ void zig(struct hand **handp_loc, struct hand *target) {
 
 }
 
-void zigzag(struct hand **hanp_loc, struct hand *parent) {
+int zigzag(struct hand **hanp_loc, struct hand *parent) {
 	struct hand *root = *hanp_loc;
 	struct hand *target, *new_left, *new_right;
 	if(parent == root->left) {
@@ -28,8 +28,9 @@ void zigzag(struct hand **hanp_loc, struct hand *parent) {
 	}
 
 	if (!target) {
+		//Could not completely zig zag
 		zig(hanp_loc, parent);
-		return;
+		return 0;
 	}
 
 	new_right->left = target->right;
@@ -37,6 +38,7 @@ void zigzag(struct hand **hanp_loc, struct hand *parent) {
 	target->left = new_left;
 	target->right = new_right;
 	*hanp_loc = target;
+	return 1;
 
 }
 
