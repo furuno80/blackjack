@@ -59,8 +59,12 @@ void splay(struct hand **handp_loc, int needle) {
 			return;
 	} else if (factor * (needle - side->card.rank)>0) {
 		//Target is an inner node
-		zigzag(&hand, side);
+		if(zigzag(&hand, side)) {
 		continue;
+		} else {
+			//could not complete a zigzag, target does not exist
+			return;
+		}
 	} else {
 		//Target is on the outside
 		zig(&hand, side);
