@@ -5,6 +5,7 @@
 #include "card.h"
 #include "deck.h"
 #include "hand.h"
+#include "table.h"
 
 
 void print_deck(struct pile *curr) {
@@ -40,12 +41,6 @@ void print_hand(struct hand *hand)
 
 }
 
-void build_table(struct hand *hand, char *name[]) {
-
-}
-
-
-
 
 int main()
 
@@ -53,42 +48,21 @@ int main()
 
     struct pile *deck = standard_52();
     char *names[] = {"Joal", "Liam", "James"};
+    struct table *players = build_table(10);
 
-    //This is a change
     shuffle(deck);
-    //struct pile *curr = deck;
     for (int n = 0; n < 3; n++) {
     	struct hand *hand = build_hand(deal(&deck, 5));
-    	//store_table(players, name[n], build_hand(deal(&deck, 5));
+    	store_table(players, names[n], hand);
     	printf("%s has a hand of:\n", names[n]);
     	print_hand(hand);
     }
 
-    //struct pile *James = deal(&deck, 5);
-    //struct pile *Joal = deal(&deck, 5);
-    //struct pile *Liam = deal(&deck, 5);
-    //struct pile *dealt = deal(&deck, 5);
-    //print_deck(James);
-    printf("\n\n");
-    //print_deck(Joal);
-    printf("\n\n");
-    //print_deck(Liam);
-    printf("\n\n");
-    //struct hand *myhand = build_hand(dealt);
-    //struct hand *James_hand = build_hand(James);
-    //struct hand *Joals_hand = build_hand(Joal);
-    //struct hand *Liams_hand = build_hand(Liam);
-    //print_hand(myhand);
-    //printf("James' hand: \n\n");
-    //print_hand(James_hand);
-    //printf("\n\nJoal's hand:\n\n");
-    //print_hand(Joals_hand);
-    //printf("\n\nLiam's hand:\n\n");
-    //print_hand(Liams_hand);
-    printf("\n\nThere are %i cards in the deck\n", pile_len(deck));
 
-    //free_hand(myhand);
-    //free_deck(dealt);
+    char asked[80];
+    printf("Whose hand would you like to see?");
+    scanf("%s", asked);
+    print_hand(fetch_table(players, asked));
     free_deck(deck);
 
 }

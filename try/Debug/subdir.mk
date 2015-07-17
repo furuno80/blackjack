@@ -7,19 +7,22 @@ C_SRCS += \
 ../blackjack.c \
 ../card.c \
 ../deck.c \
-../hand.c 
+../hand.c \
+../table.c 
 
 OBJS += \
 ./blackjack.o \
 ./card.o \
 ./deck.o \
-./hand.o 
+./hand.o \
+./table.o 
 
 C_DEPS += \
 ./blackjack.d \
 ./card.d \
 ./deck.d \
-./hand.d 
+./hand.d \
+./table.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
