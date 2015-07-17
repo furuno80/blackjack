@@ -8,7 +8,7 @@ struct pile *standard_52(void) {
 	struct pile *deck = NULL;
 	struct pile *previous = NULL;
 
-	srand(time(NULL));
+	//srand(time(NULL));
 
 	for (int i = 0; i < 4; i++) {
 		for (int p = 2; p < 15; p++) {

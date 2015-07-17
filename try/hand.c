@@ -81,10 +81,11 @@ struct hand *build_hand(struct pile *pile) {
 struct hand *new_hand = NULL;
 while (pile) {
 	add_card(&new_hand, pile->card);
-	printf("Building hand: %d\n", pile->card.rank);
-	pprint_hand(new_hand, 0);
+	//printf("Building hand: %d\n", pile->card.rank);
+	//pprint_hand(new_hand, 0);
 	pile = pile->next;
 }
+pprint_hand(new_hand, 0);
 return new_hand;
 
 }
@@ -142,11 +143,13 @@ free(hand);
 }
 
 void pprint_hand(struct hand *hand, int space) {
-	if(!hand) {
-		return;
-	}
+
 	for(int n = 0; n < space; n++) {
 		printf(" ");
+	}
+	if(!hand) {
+		printf("NULL\n");
+		return;
 	}
 	char buf[MAX_CARD_STR_LEN];
 	if (!card_str(&hand->card, buf, sizeof(buf))) {
