@@ -40,7 +40,9 @@ void print_hand(int fd, struct hand *hand)
 
 	char buf[MAX_CARD_STR_LEN];
 	if(!card_str(&hand->card, buf, sizeof(buf))) {
-		write(fd, "Invalid card\n", 13);
+		if(13 != write(fd, "Invalid card\n", 13)){
+			perror("Could not write to placeholder");
+		}
 	} else {
 		write(fd, buf, strlen(buf));
 		write(fd, "\n", 1);
