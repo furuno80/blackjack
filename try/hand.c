@@ -85,7 +85,7 @@ while (pile) {
 	//pprint_hand(new_hand, 0);
 	pile = pile->next;
 }
-pprint_hand(new_hand, 0);
+//pprint_hand(new_hand, 0);
 return new_hand;
 
 }
@@ -145,7 +145,7 @@ free(hand);
 void pprint_hand(struct hand *hand, int space) {
 
 	for(int n = 0; n < space; n++) {
-		printf(" ");
+		//printf(" ");
 	}
 	if(!hand) {
 		printf("NULL\n");
@@ -155,7 +155,7 @@ void pprint_hand(struct hand *hand, int space) {
 	if (!card_str(&hand->card, buf, sizeof(buf))) {
 		printf("Invalid card\n");
 	} else {
-		printf("In hand: %s\n", buf);
+		//printf("In hand: %s\n", buf);
 	}
 	pprint_hand(hand->left, space + 1);
 	pprint_hand(hand->right, space + 1);
