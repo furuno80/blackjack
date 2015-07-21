@@ -11,24 +11,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-
-
-
-
-
-void print_deck(struct pile *curr) {
-    char buf[MAX_CARD_STR_LEN];
-
-    while(curr) {
-    	if(!card_str(&curr->card, buf, MAX_CARD_STR_LEN)) {
-    		printf("Invalid card\n");
-    	} else {
-    		printf("%s\n", buf);
-    	}
-    	curr = curr->next;
-    }
-
-}
+void puts_hand(FILE *fh, struct hand *hand);
 
 void print_hand(int fd, struct hand *hand)
 {
@@ -51,6 +34,78 @@ void print_hand(int fd, struct hand *hand)
 
 
 }
+
+void puts_hand(FILE *fh, struct hand *hand)
+{
+	if(!hand) {
+		return;
+	}
+
+	puts_hand(fh, hand->left);
+
+	char buf[MAX_CARD_STR_LEN];
+	if(!card_str(&hand->card, buf, sizeof(buf))) {
+		if(!fputs("Invalid card\n", fh)){
+			perror("Could not put placeholder");
+		}
+	} else {
+		if(strlen(buf) + 1 != fprintf(fh, "%s\n", buf)){
+			perror("Could not put card");
+
+	puts_hand(fh, hand->right);
+
+		}
+	}
+}
+
+
+
+
+void library_save(char *name, struct hand *hand) {
+
+	FILE *fh = fopen(name, "w");
+	if(!fh) {
+		perror("Could not open file %s");
+		return;
+	} else {
+
+		if(fclose(fh)) {
+			perror("Could not close file");
+		}
+		puts_hand(fh, hand);
+	}
+
+}
+
+void system_save(char *name, struct hand *hand) {
+	int fd = creat(name, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+	if (fd == -1) {
+		perror("Could not create file");
+		//print_hand(fd, hand);
+	} else {
+		print_hand(fd, hand);
+	}
+	if (-1  ==close(fd)) {
+		perror("Could not close file");
+	}
+
+}
+
+void print_deck(struct pile *curr) {
+    char buf[MAX_CARD_STR_LEN];
+
+    while(curr) {
+    	if(!card_str(&curr->card, buf, MAX_CARD_STR_LEN)) {
+    		printf("Invalid card\n");
+    	} else {
+    		printf("%s\n", buf);
+    	}
+    	curr = curr->next;
+    }
+
+}
+
+
 
 
 int main()
@@ -77,8 +132,8 @@ int main()
     if (fd == -1) {
     	perror("Could not create file");
     }
-    print_hand(fd, fetch_table(players, asked));
-
+    //print_hand(fd, fetch_table(players, asked));
+    system_save(asked, fetch_table(players, asked));
     close(fd);
     //print_hand(fetch_table(players, asked));
     free_deck(deck);
