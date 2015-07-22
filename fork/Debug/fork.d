@@ -1,0 +1,1 @@
+fork.d: ../fork.c
